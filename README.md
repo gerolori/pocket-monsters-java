@@ -1,22 +1,22 @@
-# 🐉 Pocket Monsters - Java Mobile Dev Project
+# Pocket Monsters - Java Mobile Dev Project
 
 An Android location-based game where you can **combat monsters**, **collect candys**, and **equip artifacts**! Explore the real world to discover virtual creatures and items, battle them, and climb the leaderboards.
 
-## 📱 About
+## About
 
 Pocket Monsters is a modern Android application built with Java that combines real-world exploration with virtual monster collection. Using GPS and Google Maps integration, players can discover monsters and items at real-world locations, engage in combat, collect resources, and customize their character with powerful equipment.
 
-### ✨ Features
+### Features
 
-- 🗺️ **Location-Based Gameplay**: Use Google Maps to find monsters and items in your area
-- ⚔️ **Combat System**: Battle monsters to gain experience and collect rewards
-- 🍬 **Candy Collection**: Gather candys from defeated monsters and discovered items
-- 🛡️ **Equipment System**: Equip weapons, armor, and amulets to enhance your character
-- 📊 **Leaderboards**: Compete with other players and climb the rankings
-- 👤 **Profile Management**: Track your life points, experience, and customize your avatar
-- 🌐 **Real-Time Updates**: See nearby players and their positions on the map
+- **Location-Based Gameplay**: Use Google Maps to find monsters and items in your area
+- **Combat System**: Battle monsters to gain experience and collect rewards
+- **Candy Collection**: Gather candys from defeated monsters and discovered items
+- **Equipment System**: Equip weapons, armor, and amulets to enhance your character
+- **Leaderboards**: Compete with other players and climb the rankings
+- **Profile Management**: Track your life points, experience, and customize your avatar
+- **Real-Time Updates**: See nearby players and their positions on the map
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Language**: Java 17
 - **Platform**: Android (Min SDK 34, Target SDK 36)
@@ -28,7 +28,7 @@ Pocket Monsters is a modern Android application built with Java that combines re
 - **Analytics**: Firebase Crashlytics & Analytics
 - **UI**: Material Design Components, View Binding
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have:
 
@@ -38,7 +38,7 @@ Before you begin, ensure you have:
 - A **Google Maps API key** (instructions below)
 - Access to the **backend API** (API URL needed)
 
-## 🚀 Setup
+## Setup
 
 ### 1. Get a Google Maps API Key
 
@@ -73,7 +73,7 @@ Before you begin, ensure you have:
    ./gradlew installDebug
    ```
 
-## 🎮 How to Play
+## How to Play
 
 1. **Explore**: Open the app and allow location permissions to see the map
 2. **Discover**: Move around in the real world to find monsters and items on the map
@@ -82,7 +82,7 @@ Before you begin, ensure you have:
 5. **Equip**: Visit your profile to equip weapons, armor, and amulets
 6. **Compete**: Check the leaderboard to see how you rank against other players
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 app/src/main/
@@ -100,7 +100,7 @@ app/src/main/
 └── res/                               # Resources (layouts, drawables, etc.)
 ```
 
-## 🔧 Development
+## Development
 
 ### Building for Release
 
@@ -114,21 +114,3 @@ app/src/main/
 ./gradlew test
 ./gradlew connectedAndroidTest
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
-## 📄 License
-
-See the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Google Maps Platform for location services
-- Firebase for analytics and crash reporting
-- The Android development community
-
----
-
-**Happy Monster Hunting!** 🎯
