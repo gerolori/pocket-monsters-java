@@ -1,4 +1,4 @@
-# pocket-monsters for android 14
+# Pocket Monsters - Java Mobile Dev project
 Combact monsters, collect candys and equip artifacts!
 
 ## Setup
