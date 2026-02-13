@@ -73,14 +73,112 @@ Before you begin, ensure you have:
    ./gradlew installDebug
    ```
 
-## How to Play
+## Architecture
 
-1. **Explore**: Open the app and allow location permissions to see the map
-2. **Discover**: Move around in the real world to find monsters and items on the map
-3. **Interact**: Tap on map markers to interact with nearby objects
-4. **Combat**: Battle monsters to earn experience points and collect candys
-5. **Equip**: Visit your profile to equip weapons, armor, and amulets
-6. **Compete**: Check the leaderboard to see how you rank against other players
+Pocket Monsters follows the **MVVM (Model-View-ViewModel)** architectural pattern, providing clear separation of concerns and maintainability. The application is structured into three primary layers:
+
+### Presentation Layer
+
+The presentation layer handles all UI logic and user interactions through **Fragments** and **ViewModels**:
+
+- **Fragments**: Act as Views in the MVVM pattern
+  - `MapFragment`: Displays the Google Map with nearby monsters, items, and other players
+  - `ProfileFragment`: Shows user profile, stats (life points, experience), and equipment management
+  - `LeaderboardFragment`: Displays player rankings based on experience points
+  - `ObjectInteractionFragment`: Dialog for interacting with monsters and items (combat/collection)
+  - `ItemListDialogFragment`: Shows list of nearby virtual items
+
+- **ViewModels**: Manage UI-related data and business logic
+  - Extend `androidx.lifecycle.ViewModel` for lifecycle-aware data handling
+  - Examples: `MapViewModel`, `ProfileFragmentViewModel`, `LeaderboardViewModel`
+  - Handle data transformations between the data layer and UI
+
+- **MainActivity**: Single activity that hosts all fragments and manages bottom navigation
+
+### Data Layer
+
+The data layer is divided into **remote** and **local** components:
+
+#### Remote Data Source
+- **ApiInterface**: Retrofit interface defining all REST API endpoints
+  - User management (`POST /users`, `GET /users`, `PATCH /users/{uid}`)
+  - Virtual items (`GET /objects`, `GET /objects/{id}`, `POST /objects/{id}/activate`)
+  - Leaderboard rankings (`GET /ranking`)
+  
+- **InterfaceConverter**: Centralized API client manager
+  - Creates Retrofit instances with base URL from BuildConfig
+  - Manages session ID (sid) and user ID (uid) in SharedPreferences
+  - Provides callback-based methods for all API operations
+  - Implements caching strategies for user credentials
+
+- **Callbacks**: Asynchronous response handlers for API calls
+  - `UserIDCallback`, `VirtualItemDetailCallback`, `RankingCallback`, etc.
+  - Enable non-blocking network operations
+
+#### Local Data Source
+- **Room Database**: SQLite-based local persistence
+  - `UserDB`: Stores user profile data locally
+    - Entity: `User` (profile picture, name, life points, experience, equipped items)
+    - DAO: `UserDAO` for CRUD operations
+  
+  - `VirtualItemDB`: Caches virtual items for offline access
+    - Entity: `VirtualItem` (id, name, image, level, location, type)
+    - DAO: `VirtualItemDAO` for managing cached items
+
+### Model Layer
+
+Data Transfer Objects (DTOs) and entities for data representation:
+
+- **API Response Models**: Plain Java objects (POJOs) for API responses
+  - `UserID`, `UserDetail`, `UserNearby`, `UserRanking`
+  - `VirtualItemNearby`, `VirtualItemDetail`, `VirtualItemActivated`
+  - Parsed from JSON using Gson converter
+
+- **Database Entities**: Room entities with annotations
+  - `@Entity`, `@PrimaryKey`, `@NonNull` for schema definition
+  - Stored in local SQLite database for offline functionality
+
+### Data Flow
+
+1. **App Launch**:
+   - `MainActivity.onCreate()` requests user ID from API via `InterfaceConverter.requestUserID()`
+   - Session credentials (sid, uid) are stored in SharedPreferences
+   - Default `MapFragment` is loaded
+
+2. **Location-Based Discovery**:
+   - User's GPS coordinates are captured using Google Play Services Location API
+   - `MapFragment` periodically calls `ApiInterface.getVirtualItemsNearby()` with current location
+   - Nearby monsters, items, and players are displayed as markers on Google Map
+
+3. **User Interaction**:
+   - User taps on map marker or list item
+   - Fragment launches `ObjectInteractionFragment` dialog
+   - Dialog fetches detailed information via `ApiInterface.getVirtualItemDetail()`
+   - User can activate (combat/collect) the item via `ApiInterface.activatedVirtualItem()`
+
+4. **Data Persistence**:
+   - API responses are cached in Room database (`UserDB`, `VirtualItemDB`)
+   - UI first checks local database, then syncs with remote API
+   - Reduces network calls and enables offline browsing
+
+5. **Profile & Equipment**:
+   - User data fetched from `ApiInterface.getUserDetail()`
+   - Profile updates (name, picture) sent via `PATCH /users/{uid}`
+   - Equipment changes immediately reflected in local database and synced to API
+
+6. **Leaderboard**:
+   - Rankings fetched from `ApiInterface.getRanking()`
+   - RecyclerView with custom adapter displays sorted player list
+   - Refresh pulls latest data from server
+
+### Key Integration Points
+
+- **Google Maps SDK**: Integrated in `MapFragment` for location visualization
+- **Retrofit + OkHttp**: HTTP client for RESTful API communication
+- **Room Database**: Type-safe database access with compile-time verification
+- **Material Components**: Consistent UI with bottom navigation and dialogs
+- **Firebase**: Crashlytics for error reporting, Analytics for user behavior tracking
+- **View Binding**: Type-safe view access eliminating findViewById calls
 
 ## Project Structure
 
